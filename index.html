@@ -503,7 +503,12 @@ el("heroRoles").textContent = site.roles;
 el("heroLede").textContent = site.lede;
 const heroId = site.reelId || (films.find(f => f.id) || {}).id || "";
 if (site.heroImage) {
-  el("heroMedia").innerHTML = `<img src="${esc(site.heroImage)}" alt="${esc(site.name)}">`;
+  const hi = new Image();
+  hi.alt = site.name;
+  hi.onerror = () => { document.querySelector(".hero").classList.remove("split"); el("heroMedia").style.display = "none"; };
+  hi.src = site.heroImage;
+  el("heroMedia").innerHTML = "";
+  el("heroMedia").appendChild(hi);
   const hero = document.querySelector(".hero");
   const text = document.createElement("div");
   text.className = "hero-text";
