@@ -3,9 +3,9 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Derek Ziegler — Filmmaker / Editor / On-Camera</title>
+<title>Derek Ziegler — Director / Cinematographer / Editor / On-Camera</title>
 <meta name="description" content="Derek Ziegler is a filmmaker, editor and on-camera talent with a background in broadcast television, professional video production and independent film.">
-<meta property="og:title" content="Derek Ziegler — Filmmaker / Editor / On-Camera">
+<meta property="og:title" content="Derek Ziegler — Director / Cinematographer / Editor / On-Camera">
 <meta property="og:description" content="Broadcast television, professional video production, independent film.">
 <meta property="og:type" content="website">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -73,6 +73,10 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--cyan);outline-offse
 .plate h1{margin:0;font-size:clamp(34px,7.4vw,74px);line-height:.94;font-weight:900;letter-spacing:-.02em;text-transform:uppercase}
 .plate .roles{margin-top:10px}
 .hero-lede{margin:clamp(26px,4vw,44px) 0 0;max-width:640px;font-size:clamp(17px,2.2vw,20px);color:#C9C8C2}
+
+/* 画像・動画が無いとき: 名前がナビの下に潜らないようにする */
+.hero.bare{padding-top:clamp(30px,6vw,72px)}
+.hero.bare .plate{margin-top:0}
 
 /* 画像ヒーロー: 名前と写真を左右に並べる */
 .hero.split{max-width:var(--maxw);margin:0 auto;padding:clamp(26px,4vw,56px) var(--gut) 0;
@@ -190,8 +194,8 @@ footer .wrap{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
 <script>
 const SITE = {
   name: "Derek Ziegler",
-  roles: "Director · Editor · On-Camera Talent",
-  lede: "Broadcast television, professional video production, and independent film. Fifteen years of making things on both sides of the camera — in Orlando, Florida. Available for directing, editing, camera, and on-camera work.",
+  roles: "Director · Cinematographer · Editor · On-Camera Talent",
+  lede: "Broadcast television, professional video production, and independent film. Fifteen years of making things on both sides of the camera — in Orlando, Florida. Available for directing, camera, editing, and on-camera work.",
   email: "derekisok@gmail.com",
   heroImage: "images/derek.webp",      // 画像を置くと動画より優先される。正方形〜縦長推奨
   reelId: "",                          // リール動画のID（未設定なら最新作の予告編を使う）
@@ -254,7 +258,7 @@ const MUSIC = [
 const FILMS = [
   {
     title:"The Deal", year:"2026", collective:"Rotten Rabbit", id:"1189483267",
-    roles:["Director","Writer","Editor"],
+    roles:["Writer","Director","Cinematographer","Editor"],   // 出演なし
     synopsis:"TODO ログライン（1〜2行）。48HFP Fort Pierce 2026 の課題要素は、キャラクター Devin Malone（不動産エージェント）、指定のセリフ、小道具「包装されたギフト」。",
     headline:"Best Film 2026 — representing Fort Pierce at Filmapalooza 2027",
     festivals:[
@@ -266,7 +270,7 @@ const FILMS = [
   },
   {
     title:"Neighborhood Security", year:"2025", collective:"Rotten Rabbit", id:"1116245345",
-    roles:["Director"],   // TODO Writer / Editor など他の役割があれば追加
+    roles:["Writer","Director","Cinematographer","Editor","Actor"],
     synopsis:"TODO ログライン（1〜2行）。48HFP Orlando 2025 の課題要素は、キャラクター Edward / Edwin / Edwina Diaz（軍の退役軍人）、指定のセリフ、小道具「フォーチュンクッキー」。",
     headline:"Best Film 2025 — represented Orlando at Filmapalooza 2026",
     festivals:[
@@ -282,7 +286,7 @@ const FILMS = [
   },
   {
     title:"Haze", year:"2025", collective:"Rotten Rabbit", id:"g4vC9yPKymU",
-    roles:["Director","Writer","Producer"],
+    roles:["Writer","Director","Cinematographer","Editor","Producer"],   // 出演なし
     cast:"Julia Dansereau, Amanda Diaz, Jessica Celestina, Timothy Bell, Matt Einhorn, Melissa Briggs",
     synopsis:"TODO ログライン（1〜2行）。",
     headline:"Best Picture 2025",
@@ -294,7 +298,7 @@ const FILMS = [
   },
   {
     title:"Vacation Hot Spot", year:"2019", collective:"", id:"354990104",
-    roles:["Writer","Director","Actor"],   // TODO 役割を確認
+    roles:["Writer","Director","Cinematographer","Editor","Actor"],
     cast:"",
     synopsis:"TODO ログライン（1〜2行）。共同脚本 David Hosmer, Victoria White。",
     headline:"",
@@ -306,7 +310,7 @@ const FILMS = [
   },
   {
     title:"Picture Perfect", year:"2018", collective:"", id:"8Ts5sj-8AL0", videoLabel:"Full film",
-    roles:["Writer","Director","Actor"],   // TODO 役割を確認
+    roles:["Writer","Director","Cinematographer","Editor","Actor"],
     cast:"",
     synopsis:"TODO ログライン（1〜2行）。ロマンティック・コメディ。共同脚本 David Hosmer, Victoria White。",
     headline:"Best Film 2018 — represented Orlando at Filmapalooza",
@@ -505,7 +509,11 @@ const heroId = site.reelId || (films.find(f => f.id) || {}).id || "";
 if (site.heroImage) {
   const hi = new Image();
   hi.alt = site.name;
-  hi.onerror = () => { document.querySelector(".hero").classList.remove("split"); el("heroMedia").style.display = "none"; };
+  hi.onerror = () => {
+    const h = document.querySelector(".hero");
+    h.classList.remove("split"); h.classList.add("bare");
+    el("heroMedia").style.display = "none";
+  };
   hi.src = site.heroImage;
   el("heroMedia").innerHTML = "";
   el("heroMedia").appendChild(hi);
@@ -521,6 +529,7 @@ if (site.heroImage) {
     .replace(/^<div class="media">/, "").replace(/<\/div>$/, "");
 } else {
   el("heroMedia").style.display = "none";
+  document.querySelector(".hero").classList.add("bare");
 }
 
 /* FILM */
